@@ -55,8 +55,13 @@ struct task_struct{
     uint32_t* self_kstack;
     enum task_status status;
     uint8_t priority;
+    // uint8_t a;
+    
+    // uint8_t cc;
     char name[16];
     uint8_t ticks;
+    uint8_t a;
+    uint8_t cc;
     uint32_t elapsed_ticks;
     struct list_elem general_tag;
     //thread queue
@@ -75,4 +80,6 @@ struct task_struct* thread_start(char* name, \
 struct task_struct* running_thread();
 void schedule();
 void thread_init();
+void thread_block(enum task_status stat);
+void thread_unblock(struct task_struct* pthread);
 #endif

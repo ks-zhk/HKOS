@@ -5,7 +5,7 @@
 #include "thread.h"
 #include "debug.h"
 
-#define IRQ0_FREQUENCY 100
+#define IRQ0_FREQUENCY 1000
 #define INPUT_FREQUENCY 1193180
 #define COUNTER0_VALUE INPUT_FREQUENCY / IRQ0_FREQUENCY
 #define COUNTER0_PORT 0x40
@@ -24,8 +24,6 @@ static void frequency_set(uint8_t counter_port,\
     outb(counter_port,(uint8_t)(counter_value >> 8));
 }
 static void intr_timer_handler(void){
-    // put_int(ticks);
-    // put_char('\n');
     struct task_struct* cur_thread = running_thread();
     ASSERT(cur_thread->stack_magic == 0x20010614);//?
     cur_thread->elapsed_ticks++;

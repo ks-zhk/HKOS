@@ -2,6 +2,7 @@
 #include "interrupt.h"
 #include "init.h"
 #include "../../device/c/timer.h"
+#include "console.h"
 #include "memory.h"
 #include "thread.h"
 void init_all(){
@@ -10,6 +11,7 @@ void init_all(){
     timer_init();
     mem_init();
     thread_init();
+    console_init();
     put_str("init_all done!\n");
     return;
 }

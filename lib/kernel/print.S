@@ -13,6 +13,7 @@ put_int:
     ;4 byte integer data
     ;data
     ;eip
+    ; cli
     pushad
     mov ebp,esp
     mov eax,[ebp + 4*9]
@@ -63,9 +64,11 @@ put_int:
     cmp edi,8
     jl .put_each_num
     popad
+    ; sti
     ret
 
 put_str:
+    ; cli
     push ebx
     push ecx
     xor ecx,ecx
@@ -82,6 +85,7 @@ put_str:
 .str_over:
     pop ecx
     pop ebx
+    ; sti
     ret
 
 put_char:

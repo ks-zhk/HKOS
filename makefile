@@ -3,20 +3,20 @@ ENTRY_POINT = 0xc0001500
 AS = nasm
 CC = gcc
 LD = ld
-LIB = -I lib/ -I lib/kernel/ -I lib/user/ -I device/ -I thread/
+LIB = -I lib/ -I lib/kernel/ -I lib/user/ -I device/ -I thread/ -I device/c/
 ASFLAGS = -f elf
 CFLAGS = -m32 -Wall $(LIB) -c -fno-builtin -W -Wstrict-prototypes \
 		 -Wmissing-prototypes
 LDFLAGS = -Ttext $(ENTRY_POINT) -e main -m elf_i386
-OBJS = $(BUILD_DIR)/main.o $(BUILD_DIR)/thread.o $(BUILD_DIR)/init.o $(BUILD_DIR)/memory.o $(BUILD_DIR)/bitmap.o $(BUILD_DIR)/string.o $(BUILD_DIR)/debug.o $(BUILD_DIR)/interrupt.o $(BUILD_DIR)/print.o \
+OBJS = $(BUILD_DIR)/main.o $(BUILD_DIR)/console.o $(BUILD_DIR)/sync.o $(BUILD_DIR)/thread.o $(BUILD_DIR)/init.o $(BUILD_DIR)/memory.o $(BUILD_DIR)/bitmap.o $(BUILD_DIR)/string.o $(BUILD_DIR)/debug.o $(BUILD_DIR)/interrupt.o $(BUILD_DIR)/print.o \
 	   $(BUILD_DIR)/timer.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/switch.o $(BUILD_DIR)/list.o
 
 ###### compile c file #########
 $(BUILD_DIR)/main.o: lib/kernel/main.c lib/stdint.h lib/kernel/print.h lib/kernel/init.h lib/kernel/debug.h \
-lib/kernel/memory.h thread/thread.h lib/interrupt.h
+lib/kernel/memory.h thread/thread.h lib/interrupt.h device/c/console.h
 	$(CC) $(CFLAGS) $< -o $@
 $(BUILD_DIR)/init.o: lib/kernel/init.c lib/kernel/init.h lib/stdint.h lib/kernel/print.h lib/interrupt.h \
-device/c/timer.h thread/thread.h
+device/c/timer.h thread/thread.h device/c/console.h
 	$(CC) $(CFLAGS) $< -o $@
 $(BUILD_DIR)/debug.o: lib/kernel/debug.c lib/kernel/debug.h lib/kernel/print.h lib/interrupt.h \
 lib/stdint.h
@@ -37,7 +37,12 @@ lib/kernel/bitmap.h lib/stdint.h lib/kernel/debug.h
 $(BUILD_DIR)/thread.o:	thread/thread.c thread/thread.h lib/stdint.h lib/kernel/memory.h lib/kernel/global.h lib/kernel/string.h \
 lib/interrupt.h lib/kernel/list.h  lib/kernel/debug.h lib/kernel/print.h
 	$(CC) $(CFLAGS) $< -o $@
-$(BUILD_DIR)/list.o:	lib/kernel/list.c lib/kernel/list.h lib/stdint.h lib/interrupt.h
+$(BUILD_DIR)/list.o:	lib/kernel/list.c lib/kernel/list.h lib/stdint.h lib/interrupt.h lib/kernel/debug.h
+	$(CC) $(CFLAGS) $< -o $@
+
+$(BUILD_DIR)/sync.o:	thread/sync.c thread/sync.h thread/thread.h lib/stdint.h lib/interrupt.h lib/kernel/debug.h lib/kernel/list.h
+	$(CC) $(CFLAGS) $< -o $@
+$(BUILD_DIR)/console.o:	device/c/console.c device/c/console.h thread/thread.h thread/sync.h lib/stdint.h lib/kernel/print.h
 	$(CC) $(CFLAGS) $< -o $@
 ###### compile asm file ########
 $(BUILD_DIR)/print.o: lib/kernel/print.S

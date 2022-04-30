@@ -2,6 +2,11 @@
     "files.associations": {
         "stdint.h": "c",
         "head.h": "c",
-        "print.h": "c"
+        "print.h": "c",
+        "type_traits": "c",
+        "xtr1common": "c",
+        "vector": "c",
+        "xutility": "c",
+        "algorithm": "c"
     }
 }

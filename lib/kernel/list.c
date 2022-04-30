@@ -1,7 +1,7 @@
 #include "list.h"
 #include "interrupt.h"
 #include "stdint.h"
-#include "console.h"
+// #include "console.h"
 #include "debug.h"
 #define NULL 0
 
